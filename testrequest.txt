@@ -7,10 +7,27 @@
   "foundedOn": "2017-11-10T14:05:08.773Z",
   "beers": [
     {
-      "id": "9611E60E-E1B3-4399-89B3-354E82F9CD53",
+      "id": "9611E60E-E1B3-4399-89B3-354E82F9CD63",
       "name": "Keelhaul Surprise",
       "isGlutenFree": true,
       "abv": 21
+    }
+  ]
+}
+
+{
+  "id": "9611E60E-E1B3-4399-89B4-354E82F9CD54",
+  "name": "Pirate Brewery II",
+  "owner": "Long John Silver",
+  "isActive": true,
+  "numberOfStills": 4,
+  "foundedOn": "2017-11-10T14:05:08.773Z",
+  "beers": [
+    {
+      "id": "9611E60E-E1B3-4399-89B3-354E82F9CD64",
+      "name": "Brig",
+      "isGlutenFree": false,
+      "abv": 34
     }
   ]
 }

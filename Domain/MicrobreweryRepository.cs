@@ -74,29 +74,54 @@ namespace Domain
         {
             Delete(microbrewery.Id);
             _microbreweries.Add(microbrewery);
-
         }
 
-        public Microbrewery Get(Guid Id)
+        public Microbrewery Get(Guid microbreweryId)
         {
             return (from x in Microbreweries
-             where x.Id == Id
+             where x.Id == microbreweryId
              select x).FirstOrDefault();
         }
 
         public HashSet<Beer> GetAllBeers()
         {
-            throw new NotImplementedException();
+            HashSet<Beer> beers = new HashSet<Beer>();
+            foreach(Microbrewery microbrewery in _microbreweries)
+            {
+                beers.UnionWith(microbrewery.Beers);
+            }
+            return beers;
         }
 
-        public void UpdateBeer(Beer beer)
+        public void UpdateBeer(Guid microbreweryId, Beer beer)
         {
-            throw new NotImplementedException();
+           DeleteBeer(microbreweryId, beer.Id);
+           var microbrewery = Get(microbreweryId);
+           microbrewery.Beers.Add(beer); 
         }
 
-        public void DeleteBeer(Beer beer)
+        private Beer GetBeerById(Microbrewery microbrewery, Guid beerId)
         {
-            throw new NotImplementedException();
+            var beerToUpdate = (from x in microbrewery.Beers
+                                where x.Id == beerId
+                                select x).FirstOrDefault();
+            return beerToUpdate;
+        }
+
+        public void DeleteBeer(Guid microbreweryId, Guid beerId)
+        {
+            var microbrewery = Get(microbreweryId);
+            if (microbrewery is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var beerToUpdate = GetBeerById(microbrewery,beerId);
+            if (beerToUpdate is null)
+            {
+                throw new InvalidOperationException();
+            }
+            microbrewery.Beers.Remove(beerToUpdate);
         }
 
         

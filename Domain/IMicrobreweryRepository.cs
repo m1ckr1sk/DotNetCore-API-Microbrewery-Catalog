@@ -8,10 +8,6 @@ namespace Domain
     {
         void Add(Microbrewery microbrewery);
 
-        void AddBeer(Guid microbreweryId, Beer beer);
-
-        void AddBeers(Guid microbreweryId, HashSet<Beer> beers);
-
         HashSet<Microbrewery> GetAll();
 
         Microbrewery GetByName(string name);
@@ -24,9 +20,13 @@ namespace Domain
 
         HashSet<Beer> GetAllBeers();
 
-        void UpdateBeer(Beer beer);
+        void AddBeer(Guid microbreweryId, Beer beer);
 
-        void DeleteBeer(Beer beer);
+        void AddBeers(Guid microbreweryId, HashSet<Beer> beers);
+
+        void UpdateBeer(Guid microbreweryId, Beer beer);
+
+        void DeleteBeer(Guid microbreweryId, Guid beerId);
 
     }
 }

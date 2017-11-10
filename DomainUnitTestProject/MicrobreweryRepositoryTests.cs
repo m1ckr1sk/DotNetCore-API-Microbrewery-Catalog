@@ -25,7 +25,7 @@ namespace DomainUnitTestProject
             Id = Guid.NewGuid()
         };
 
-        Beer beer = new Beer
+        Beer firstBeer = new Beer
         {
             Id = Guid.NewGuid(),
             Abv = 10,
@@ -76,11 +76,11 @@ namespace DomainUnitTestProject
         public void AddingABeerToAnExistingMicrobreweryWorks()
         {            
             mbr.Add(firstMicrobrewery);
-            mbr.AddBeer(firstMicrobrewery.Id, beer);
+            mbr.AddBeer(firstMicrobrewery.Id, firstBeer);
 
             var beers = mbr.GetByName("First").Beers;
 
-            beers.Should().Contain(beer);
+            beers.Should().Contain(firstBeer);
             beers.Count.Should().Be(1);
         }
 
@@ -88,7 +88,7 @@ namespace DomainUnitTestProject
         public void AddingABeerToAnNewMicrobreweryThrowsInvalidOperationException()
         {
             // Don't add "first" microbrewery
-            Action a = () => { mbr.AddBeer(firstMicrobrewery.Id, beer); };
+            Action a = () => { mbr.AddBeer(firstMicrobrewery.Id, firstBeer); };
 
             a.ShouldThrow<InvalidOperationException>();
             
@@ -98,7 +98,7 @@ namespace DomainUnitTestProject
         public void AddingThreeBeersToAnExistingMicrobreweryWorks()
         {
             mbr.Add(firstMicrobrewery);
-            mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer>{ beer, secondBeer, thirdBeer});
+            mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer>{ firstBeer, secondBeer, thirdBeer});
 
             var beers = mbr.GetByName("First").Beers;
 
@@ -108,7 +108,7 @@ namespace DomainUnitTestProject
         [Fact]
         public void AddingThreeBeersToANewMicrobreweryThrowsInvalidOperationException()
         {
-            Action a = () => { mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer> { beer, secondBeer, thirdBeer }); };
+            Action a = () => { mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer> { firstBeer, secondBeer, thirdBeer }); };
 
             a.ShouldThrow<InvalidOperationException>();
         }
@@ -117,7 +117,7 @@ namespace DomainUnitTestProject
         public void RetrievingMicrobreweriesWithBeersWorks()
         {
             mbr.Add(firstMicrobrewery);
-            mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer> { beer, secondBeer });
+            mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer> { firstBeer, secondBeer });
 
             mbr.Add(secondMicrobrewery);
             mbr.AddBeer(secondMicrobrewery.Id, thirdBeer);
@@ -126,7 +126,7 @@ namespace DomainUnitTestProject
             var first = (from x in all
                          where x.Name == "First"
                          select x).First();
-            first.Beers.ShouldBeEquivalentTo(new HashSet<Beer> { beer, secondBeer });
+            first.Beers.ShouldBeEquivalentTo(new HashSet<Beer> { firstBeer, secondBeer });
         }
 
         [Fact]
@@ -192,6 +192,67 @@ namespace DomainUnitTestProject
             all.Should().NotContain(firstMicrobrewery);
         }
 
+        [Fact]
+        public void GetAllBeers()
+        {
+            mbr.Add(firstMicrobrewery);
+            mbr.Add(secondMicrobrewery);
 
+            mbr.GetAll().Count.Should().Be(2);
+
+            mbr.AddBeer(firstMicrobrewery.Id, firstBeer);
+            mbr.AddBeer(firstMicrobrewery.Id, secondBeer);
+            mbr.AddBeer(secondMicrobrewery.Id, thirdBeer);
+
+            var all = mbr.GetAllBeers();
+            all.Count.Should().Be(3);
+
+            all.Should().Contain(firstBeer);
+            all.Should().Contain(secondBeer);
+            all.Should().Contain(thirdBeer);
+        }
+
+
+        [Fact]
+        public void UpdateToABeerPersists()
+        {
+            Beer m = new Beer
+            {
+                Name = "Test",
+                Id = Guid.NewGuid()
+            };
+
+            firstMicrobrewery.Beers.Add(m);
+            mbr.Add(firstMicrobrewery);
+
+            Beer n = new Beer
+            {
+                Name = "Updated",
+                Id = m.Id
+            };
+
+            var allBeers = mbr.GetAllBeers();
+            var first = (from x in allBeers
+                         where x.Name == "Test"
+                         select x).First();
+            var updated = (from x in allBeers
+                         where x.Name == "Updated"
+                           select x) as IEnumerable<Beer>;
+            updated.Count().Should().Be(0);
+            first.Should().NotBeNull();
+
+            mbr.UpdateBeer(firstMicrobrewery.Id, n);
+
+            allBeers = mbr.GetAllBeers();
+            var original = (from x in allBeers
+                     where x.Name == "Test"
+                     select x) as IEnumerable<Beer>;
+            var updatedBeer = (from x in allBeers
+                           where x.Name == "Updated"
+                           select x) ;
+            original.Count().Should().Be(0);
+            updatedBeer.Should().NotBeNull();
+
+        }
     }
 }

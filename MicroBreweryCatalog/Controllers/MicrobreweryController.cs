@@ -19,9 +19,24 @@ namespace MicroBreweryCatalog.Controllers
         
         // GET api/values
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             return Ok(_microbreweryRepository.GetAll());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+            {
+                return BadRequest();
+            }
+            
+            var microbrewery = _microbreweryRepository.Get(guid);
+            return (microbrewery != null)
+                ? Ok(microbrewery)
+                : NotFound(id) as IActionResult;
         }
 
         // GET api/values/5
@@ -34,21 +49,27 @@ namespace MicroBreweryCatalog.Controllers
                 : NotFound(name) as IActionResult;
         }
 
+        [HttpGet("{microbreweryId:guid}/beer")]
+        public void AddBeerToBrewery(Guid microbreweryId, [FromBody] Beer newBeer)
+        {
+            _microbreweryRepository.AddBeer(microbreweryId, newBeer);
+        }
+
         // POST api/values
         [HttpPost]
-        public IActionResult Post([FromBody]Microbrewery microbrewery)
+        public IActionResult AddMicrobrewery([FromBody]Microbrewery microbrewery)
         {
             _microbreweryRepository.Add(microbrewery);
             return Created("microwbrewery", microbrewery);
         }
 
         // PUT api/values/5
-        [HttpPut("{guid}")]
-        public IActionResult UpdateById(Guid guid, [FromBody]Microbrewery microbrewery)
+        [HttpPut("{id}")]
+        public IActionResult UpdateById(Guid id, [FromBody]Microbrewery microbrewery)
         {
-            if( guid != microbrewery.Id)
+            if (id != microbrewery.Id)
             {
-                return NotFound(guid);
+                return NotFound(id);
             }
 
             try
@@ -56,30 +77,34 @@ namespace MicroBreweryCatalog.Controllers
                 _microbreweryRepository.Update(microbrewery);
                 return Ok(microbrewery);
             }
-            catch(InvalidOperationException exc)
+            catch(InvalidOperationException)
             {
-                return NotFound(guid);
+                return NotFound(id);
             }
         }
 
         // DELETE api/values/5
-        [HttpDelete("{guid}")]
-        public IActionResult Delete(Guid guid)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid id)
         {
-           
-            if (_microbreweryRepository.Get(guid);)
+            if (id == Guid.Empty)
             {
-                return NotFound(guid);
+                return BadRequest();
+            }
+           
+            if (_microbreweryRepository.Get(id) == null)
+            {
+                return NotFound(id);
             }
 
             try
             {
-                _microbreweryRepository.Delete(microbrewery);
+                _microbreweryRepository.Delete(id);
                 return Ok();
             }
             catch (InvalidOperationException exc)
             {
-                return NotFound(guid);
+                return NotFound(id);
             }
         }
     }

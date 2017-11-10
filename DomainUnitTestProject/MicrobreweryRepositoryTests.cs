@@ -76,7 +76,7 @@ namespace DomainUnitTestProject
         public void AddingABeerToAnExistingMicrobreweryWorks()
         {            
             mbr.Add(firstMicrobrewery);
-            mbr.AddBeer(firstMicrobrewery, beer);
+            mbr.AddBeer(firstMicrobrewery.Id, beer);
 
             var beers = mbr.GetByName("First").Beers;
 
@@ -88,7 +88,7 @@ namespace DomainUnitTestProject
         public void AddingABeerToAnNewMicrobreweryThrowsInvalidOperationException()
         {
             // Don't add "first" microbrewery
-            Action a = () => { mbr.AddBeer(firstMicrobrewery, beer); };
+            Action a = () => { mbr.AddBeer(firstMicrobrewery.Id, beer); };
 
             a.ShouldThrow<InvalidOperationException>();
             
@@ -98,7 +98,7 @@ namespace DomainUnitTestProject
         public void AddingThreeBeersToAnExistingMicrobreweryWorks()
         {
             mbr.Add(firstMicrobrewery);
-            mbr.AddBeers(firstMicrobrewery, new HashSet<Beer>{ beer, secondBeer, thirdBeer});
+            mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer>{ beer, secondBeer, thirdBeer});
 
             var beers = mbr.GetByName("First").Beers;
 
@@ -108,7 +108,7 @@ namespace DomainUnitTestProject
         [Fact]
         public void AddingThreeBeersToANewMicrobreweryThrowsInvalidOperationException()
         {
-            Action a = () => { mbr.AddBeers(firstMicrobrewery, new HashSet<Beer> { beer, secondBeer, thirdBeer }); };
+            Action a = () => { mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer> { beer, secondBeer, thirdBeer }); };
 
             a.ShouldThrow<InvalidOperationException>();
         }
@@ -117,10 +117,10 @@ namespace DomainUnitTestProject
         public void RetrievingMicrobreweriesWithBeersWorks()
         {
             mbr.Add(firstMicrobrewery);
-            mbr.AddBeers(firstMicrobrewery, new HashSet<Beer> { beer, secondBeer });
+            mbr.AddBeers(firstMicrobrewery.Id, new HashSet<Beer> { beer, secondBeer });
 
             mbr.Add(secondMicrobrewery);
-            mbr.AddBeer(secondMicrobrewery, thirdBeer);
+            mbr.AddBeer(secondMicrobrewery.Id, thirdBeer);
 
             var all = mbr.GetAll();
             var first = (from x in all
@@ -182,7 +182,7 @@ namespace DomainUnitTestProject
 
             mbr.GetAll().Count.Should().Be(2);
 
-            mbr.Delete(firstMicrobrewery);
+            mbr.Delete(firstMicrobrewery.Id);
 
             var all = mbr.GetAll();
             all.Count.Should().Be(1);

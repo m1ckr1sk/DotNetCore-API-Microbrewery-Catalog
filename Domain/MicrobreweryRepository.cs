@@ -28,9 +28,9 @@ namespace Domain
             Microbreweries.Add(microbrewery);
         }
 
-        public void AddBeer(Microbrewery microbrewery, Beer beer)
+        public void AddBeer(Guid microbreweryId, Beer beer)
         {
-            Microbrewery existingMicrobrewery = GetByName(microbrewery.Name);
+            Microbrewery existingMicrobrewery = Get(microbreweryId);
 
             if (existingMicrobrewery == null)
             {
@@ -40,17 +40,17 @@ namespace Domain
             existingMicrobrewery.Beers.Add(beer);
         }
 
-        public void AddBeers(Microbrewery microbrewery, HashSet<Beer> beers)
+        public void AddBeers(Guid microbreweryId, HashSet<Beer> beers)
         {
             foreach (Beer b in beers)
             {
-                AddBeer(microbrewery, b);
+                AddBeer(microbreweryId, b);
             }
         }
 
-        public void Delete(Guid id)
+        public void Delete(Guid microbreweryId)
         {
-            var microbreweryToUpdate = Get(id);
+            var microbreweryToUpdate = Get(microbreweryId);
             if(microbreweryToUpdate is null)
             {
                 throw new InvalidOperationException();

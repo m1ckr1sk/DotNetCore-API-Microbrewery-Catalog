@@ -1,0 +1,16 @@
+{
+  "id": "9611E60E-E1B3-4399-89B4-354E82F9CD53",
+  "name": "Pirate Brewery",
+  "owner": "Long John Silver",
+  "isActive": true,
+  "numberOfStills": 4,
+  "foundedOn": "2017-11-10T14:05:08.773Z",
+  "beers": [
+    {
+      "id": "9611E60E-E1B3-4399-89B3-354E82F9CD53",
+      "name": "Keelhaul Surprise",
+      "isGlutenFree": true,
+      "abv": 21
+    }
+  ]
+}

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Domain;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.EntityFrameworkCore;
 
 namespace MicroBreweryCatalog
 {
@@ -20,7 +21,16 @@ namespace MicroBreweryCatalog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton<IMicrobreweryRepository, MicrobreweryRepository>();
+
+            // Configure DI for repository.
+            services.AddTransient<IMicrobreweryRepository, SqlMicrobreweryRepository>();
+
+            // Get connection string for context.
+            var connectionString = Configuration["ConnectionStrings:MicrobreweryContext"];
+
+            // Configure EF.
+            services.AddEntityFrameworkSqlServer()
+                    .AddDbContext<MicrobreweryContext>(options => options.UseSqlServer(connectionString));
 
             services.AddSwaggerGen(c =>
             {

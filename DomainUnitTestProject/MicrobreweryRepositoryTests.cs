@@ -9,7 +9,7 @@ namespace DomainUnitTestProject
 {
     public class MicrobreweryRepositoryTests
     {
-        MicrobreweryRepository mbr = new MicrobreweryRepository();
+        InMemoryMicrobreweryRepository mbr = new InMemoryMicrobreweryRepository();
 
         Microbrewery firstMicrobrewery = new Microbrewery
         {
@@ -253,6 +253,30 @@ namespace DomainUnitTestProject
             original.Count().Should().Be(0);
             updatedBeer.Should().NotBeNull();
 
+        }
+
+        [Fact]
+        public void DeleteABeer()
+        {
+            Beer m = new Beer
+            {
+                Name = "Test",
+                Id = Guid.NewGuid()
+            };
+
+            firstMicrobrewery.Beers.Add(m);
+            mbr.Add(firstMicrobrewery);
+
+            var allBeers = mbr.GetAllBeers();
+            allBeers.Count().Should().Be(1);
+            allBeers.Should().Contain(m);
+
+            mbr.DeleteBeer(firstMicrobrewery.Id, m.Id);
+
+            var allBeersUpdated = mbr.GetAllBeers();
+            allBeersUpdated.Should().NotContain(m);
+            allBeersUpdated.Count().Should().Be(0);
+            
         }
     }
 }

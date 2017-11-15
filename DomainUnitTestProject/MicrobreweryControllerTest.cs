@@ -108,5 +108,25 @@ namespace DomainUnitTestProject
 
             repo.Received().AddBeers(Arg.Any<Guid>(), beers);
         }
+
+        [Fact]
+        public void DeletingABeerFromAMicrobreweryReturnsOkObjectResult()
+        {
+            Beer newBeer = new Beer
+            {
+                Id = Guid.NewGuid(),
+                Abv = 3.2m,
+                IsGlutenFree = true,
+                Name = "Keelhaul Surprise!"
+            };
+            
+            var repo = Substitute.For<IMicrobreweryRepository>();
+
+            MicrobreweryController mc = new MicrobreweryController(repo);
+
+            mc.DeleteBeer(Guid.NewGuid(), newBeer.Id);
+
+            repo.Received().DeleteBeer(Arg.Any<Guid>(), newBeer.Id);
+        }
     }
 }

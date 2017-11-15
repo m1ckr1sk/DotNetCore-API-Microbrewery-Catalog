@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Domain
 {
-    public class MicrobreweryRepository : IMicrobreweryRepository
+    public class InMemoryMicrobreweryRepository : IMicrobreweryRepository
     {
         private HashSet<Microbrewery> _microbreweries;
         private HashSet<Microbrewery> Microbreweries {

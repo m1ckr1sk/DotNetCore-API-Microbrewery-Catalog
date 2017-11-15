@@ -127,6 +127,24 @@ namespace MicroBreweryCatalog.Controllers
             }
         }
 
+        [HttpDelete("{microbreweryId}/beer/{beerId}")]
+        public IActionResult DeleteBeer(Guid microbreweryId, Guid beerId)
+        {
+            if (microbreweryId == Guid.Empty || beerId == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _microbreweryRepository.DeleteBeer(microbreweryId, beerId);
+                return Ok();
+            }
+            catch (InvalidOperationException exc)
+            {
+                return NotFound((microbreweryId.ToString() + "\\" + beerId.ToString()));
+            }
+        }
 
         [HttpDelete("{microbreweryId}")]
         public IActionResult Delete(Guid microbreweryId)
@@ -134,11 +152,6 @@ namespace MicroBreweryCatalog.Controllers
             if (microbreweryId == Guid.Empty)
             {
                 return BadRequest();
-            }
-           
-            if (_microbreweryRepository.Get(microbreweryId) == null)
-            {
-                return NotFound(microbreweryId);
             }
 
             try

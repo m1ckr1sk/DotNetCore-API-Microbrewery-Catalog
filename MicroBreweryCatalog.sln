@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroBreweryCatalog", "MicroBreweryCatalog\MicroBreweryCatalog.csproj", "{5C5F2A0B-BB61-43A1-9D10-C7566263DADC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroBreweryCatalog", "MicroBreweryCatalog\MicroBreweryCatalog.csproj", "{5C5F2A0B-BB61-43A1-9D10-C7566263DADC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{0D342D9E-6D4D-43B4-B2A0-220D902CD094}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{0D342D9E-6D4D-43B4-B2A0-220D902CD094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainUnitTestProject", "DomainUnitTestProject\DomainUnitTestProject.csproj", "{050F712A-947B-4FE2-89D9-928CD96707C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainUnitTests", "DomainUnitTestProject\DomainUnitTests.csproj", "{050F712A-947B-4FE2-89D9-928CD96707C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
